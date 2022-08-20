@@ -4,6 +4,8 @@ This bot sends message on sales of NFTs on Zuse Marketplace.
 
 You can also use this bot to receive notification for specific project too.
 
+![image](https://user-images.githubusercontent.com/71931823/185745850-555475cc-4ec8-4310-b7f8-ec4a4fb42033.png)
+
 
 ### General Commands
 
