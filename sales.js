@@ -140,7 +140,10 @@ client.api.applications(client.user.id).commands.post({data:
         var response = await web_call(url,opts)
         break
 
-            }catch(e){console.log(e)}
+            }catch(e){console.log(e)
+            console.log(`Retrying API request (1)`)
+            }
+
         }
 
         var transactions = (response['transactions'])
@@ -165,7 +168,9 @@ client.api.applications(client.user.id).commands.post({data:
             var response = await web_call(url,opts)
             break
 
-                }catch(e){console.log(e)}
+                }catch(e){console.log(e)
+                console.log(`Retrying API request (2)`)
+                }
             }
             
             var mainTx = (response['transactions'][0]['nft_transfers'])
@@ -203,7 +208,9 @@ client.api.applications(client.user.id).commands.post({data:
             var response = await web_call(url,opts)
             break
 
-                }catch(e){console.log(e)}
+                }catch(e){console.log(e)
+                console.log(`Retrying API request (3)`)
+                }
             }
 
             var nftName = response['name']
@@ -214,12 +221,22 @@ client.api.applications(client.user.id).commands.post({data:
 
             // TO GET HBAR PRICE
 
+            while(true){
+                try{
+
             var priceData = await CoinGeckoClient.simple.price({
                 ids: ['hedera-hashgraph'],
                 vs_currencies: ['usd'],
             }); 
             
             var coinPrice = (priceData['data']['hedera-hashgraph']['usd']*value).toFixed(2)
+            break
+
+        }catch(e){
+            console.log(e)
+            console.log(`Retrying Coingecko API`)
+        }
+    }
     
 
             console.log(
