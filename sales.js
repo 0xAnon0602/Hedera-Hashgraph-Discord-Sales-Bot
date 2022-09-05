@@ -250,7 +250,7 @@ client.api.applications(client.user.id).commands.post({data:
              .setColor('#808080')
              .setAuthor({ name: 'Zuse Sales', iconURL: 'https://zuse.market/img/zuse_logo.2031c4b5.png'})
              .setTitle(`${nftName} ${nftSerial} SOLD!`)
-             .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR ($${coinPrice})\n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
+             .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value}ℏ ($${coinPrice})\n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
              .setImage(nftImage)
              .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
              .setTimestamp(new Date())
@@ -281,8 +281,8 @@ client.api.applications(client.user.id).commands.post({data:
                          try{
                          var channelInfo = client.channels.cache.get(row['channelID'])
                          client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-                            console.log(e)
-                                })
+                            console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+                        })
                              }catch(e){
                                  if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
                                  else{
@@ -296,8 +296,8 @@ client.api.applications(client.user.id).commands.post({data:
                              try{
                              var channelInfo = client.channels.cache.get(row['channelID'])
                              client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-                                console.log(e)
-                                     })
+                                console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+                            })
                                  }catch(e){
                                      if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
                                      else{
