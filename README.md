@@ -1,6 +1,6 @@
-### Zuse Marketplace Sales Bot
+### Hedera Hashgraph  Sales Bot
 
-This bot sends message on sales of NFTs on Zuse Marketplace. 
+This bot sends message on sales of NFTs on Hedera Hashgraph. 
 
 You can also use this bot to receive notification for specific project too.
 
@@ -10,7 +10,7 @@ You can also use this bot to receive notification for specific project too.
 ### General Commands
 
 - `/addcollection` -> Takes contract you want to add as input !
-- `/addallcollection` -> Sends all sales from Zuse Marketplace !
+- `/addallcollection` -> Sends all sales from Hedera Hashgraph !
 - `/deletecollection` -> Takes contract as input which you want to delete !
 - ` /deleteallcollection` -> Delete all the contracts at once !
 - `/help ` -> To get overview of all commands !
