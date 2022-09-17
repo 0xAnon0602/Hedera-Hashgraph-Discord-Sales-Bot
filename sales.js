@@ -508,7 +508,7 @@ while(true){
 
                     const exampleEmbed = new MessageEmbed()
                     .setColor('#808080')
-                    .setAuthor({ name: 'HashGuild Sales'})
+                    .setAuthor({ name: 'HashGuild Sales', iconURL: 'https://www.trst-nft.com/wp-content/uploads/2022/05/HG-sponsor-logo.png'})
                     .setTitle(`${nftName} ${nftSerial} SOLD!`)
                     .setDescription(`\n**__Collection__**\n[${nftName}](https://hashguild.xyz/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR ($${coinPrice})\n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
                     .setImage(nftImage)
