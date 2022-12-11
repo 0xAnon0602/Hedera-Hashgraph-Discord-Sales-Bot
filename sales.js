@@ -185,6 +185,11 @@ for(var tx of transactions){
         }
     }
     
+    var memo64 = response['transactions'][0]['memo_base64']
+    var isMint = (atob(memo64)).includes("Mint")
+
+    if(!isMint){
+
     var mainTx = (response['transactions'][0]['nft_transfers'])
     var mainTransfers = (response['transactions'][0]['transfers'])
 
@@ -216,6 +221,8 @@ for(var tx of transactions){
     }
     
     var response = await web_call(url,opts)
+
+
     break
 
         }catch(e){console.log(e)
@@ -334,6 +341,7 @@ for(var tx of transactions){
         });
     })
 
+}
      
     
 }
