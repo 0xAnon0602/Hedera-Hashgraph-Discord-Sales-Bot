@@ -185,10 +185,7 @@ for(var tx of transactions){
         }
     }
     
-    var memo64 = response['transactions'][0]['memo_base64']
-    var isMint = (atob(memo64)).includes("Mint")
 
-    if(!isMint){
 
     var mainTx = (response['transactions'][0]['nft_transfers'])
     var mainTransfers = (response['transactions'][0]['transfers'])
@@ -341,7 +338,7 @@ for(var tx of transactions){
         });
     })
 
-}
+
      
     
 }
@@ -412,6 +409,11 @@ for(var tx of transactions){
         }
     }
     
+    var memo64 = response['transactions'][0]['memo_base64']
+    var isMint = (atob(memo64)).includes("Mint")
+
+    if(!isMint){
+
     var mainTx = (response['transactions'][0]['nft_transfers'])
     var mainTransfers = (response['transactions'][0]['transfers'])
 
@@ -580,7 +582,8 @@ for(var tx of transactions){
     })
 
      
-    
+}
+
 }
 
 break
