@@ -456,7 +456,7 @@ for(var tx of transactions){
 
     // TO GET NFT IMAGE 
 
-    var sentientImgName=(nftName.toLocaleLowerCase()).replace(' ','-')
+    var sentientImgName=(nftName.toLocaleLowerCase()).replaceAll(' ','-')
 
     var url=`https://hederasentientbackend.azurewebsites.net/nftexplorer-nft`
 
