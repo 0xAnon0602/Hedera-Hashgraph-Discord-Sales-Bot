@@ -12,7 +12,6 @@ const discord_api=process.env.DISCORD_API
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 var mainZuseAccount = `0.0.703235`
-var mainSentientAccount = `0.0.1223480`
 
 function toTimestamp(strDate){
     var datum = Date.parse(strDate);
@@ -273,7 +272,7 @@ for(var tx of transactions){
     .setColor('#808080')
     .setAuthor({ name: 'Zuse Sales', iconURL: 'https://zuse.market/img/zuse_logo.2031c4b5.png'})
     .setTitle(`${nftName} ${nftSerial} SOLD!`)
-    .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
+    .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
     .setImage(nftImage)
     .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
     .setTimestamp(new Date())
@@ -368,114 +367,46 @@ while(true){
     try{
 
 // To get new transactions in interval of 1 second
-
-var url=`https://mainnet-public.mirrornode.hedera.com/api/v1/transactions?account.id=${mainSentientAccount}&limit=100&order=desc&timestamp=gt%3A${timeStampSentient}&transactiontype=cryptotransfer&result=success`
+var url=`https://hederasentientbackend.azurewebsites.net/getactivityMarketplace`
 
 
 var opts = {
+    method: "POST",
     headers:{
         'accept': 'application/json'
-    }
+    },       
+    body: JSON.stringify({
+        "f": null,
+        "a": null,
+        "page": 1,
+        "amount": 25,
+        "activityFilter": "Sales"
+    })
 }
 
 var response = await web_call(url,opts)
 
 
-var transactions = (response['transactions'])
+var transactions = (response['response'])
+let reversedTransactions = transactions.map((e, i, a)=> a[(a.length -1) -i])
 
+for(var tx of reversedTransactions){
 
-for(var tx of transactions){
+        var saleTypeId = tx['saleTypeId']
+        var txTimestampTemp = new Date(tx['saleDate'])
+        var txTimestamp = parseInt(txTimestampTemp.getTime()/1000);
 
-    var txID = tx['transaction_id']
+        if(txTimestamp>=timeStampSentient && saleTypeId==1){
 
-    while(true){
-        try{
+        var nftTokenId = tx['tokenAddress']
+        var nftSerial = tx['serialId'] 
+        var buyer = tx['buyerAddress']
+        var seller = tx['sellerAddress']
+        var nftName = tx['name']
+        var nftImage=tx['imageCDN']
+        var value = Math.abs(parseInt(tx['salePrice']))
+        var txID = tx['saleTransactionId']
 
-    // To get each transactions info
-
-    var url=`https://mainnet-public.mirrornode.hedera.com/api/v1/transactions/${txID}?nonce=0`
-
-    var opts = {
-        headers:{
-            'accept': 'application/json'
-        }
-    }
-    
-    var response = await web_call(url,opts)
-    break
-
-        }catch(e){console.log(e)
-        console.log(`Retrying API request (2)`)
-        }
-    }
-    
-    var memo64 = response['transactions'][0]['memo_base64']
-    var isMint = (atob(memo64)).includes("Mint")
-
-    if(!isMint){
-
-    var mainTx = (response['transactions'][0]['nft_transfers'])
-    var mainTransfers = (response['transactions'][0]['transfers'])
-
-    for (nftTx of mainTx){
-        var nftTokenId = nftTx['token_id']
-        var nftSerial = nftTx['serial_number'] 
-        var buyer = nftTx['receiver_account_id']
-        var seller = nftTx['sender_account_id']
-    }
-
-    for(transfers of mainTransfers){
-        if (transfers['account']==buyer){
-            var value = Math.abs(parseInt(transfers['amount']))/10**8
-        }
-    }
-
-
-    while(true){
-        try{
-
-    // To get NFT NAME from TOKEN ID 
-
-    var url=`https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${nftTokenId}`
-
-    var opts = {
-        headers:{
-            'accept': 'application/json'
-        }
-    }
-    
-    var response = await web_call(url,opts)
-    break
-
-        }catch(e){console.log(e)
-        console.log(`Retrying API request (3)`)
-        }
-    }
-
-    var nftName = response['name']
-
-    // TO GET NFT IMAGE 
-
-    var sentientImgName=(nftName.toLocaleLowerCase()).replaceAll(' ','-')
-
-    var url=`https://hederasentientbackend.azurewebsites.net/nftexplorer-nft`
-
-    var opts = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            "friendlyurl": sentientImgName,
-            "serialId": nftSerial,
-            "ismarket": false
-        })
-    }
-    
-    
-    var response = await web_call(url,opts)
-
-    var nftImage = response['response']['imageCDNURL']
 
     // TO GET HBAR PRICE
 
@@ -497,8 +428,6 @@ for(var tx of transactions){
     // }
 
 
-
-
     console.log(
     ` 
     Name -> ${nftName}
@@ -516,7 +445,7 @@ for(var tx of transactions){
     .setColor('#808080')
     .setAuthor({ name: 'Sentient Sales', iconURL: 'https://hederasentient.com/assets/images/logo-dark.png'})
     .setTitle(`${nftName} ${nftSerial} SOLD!`)
-    .setDescription(`\n**__Collection__**\n[${nftName}](https://hederasentient.com/nft-explorer/${sentientImgName})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
+    .setDescription(`\n**__Collection__**\n[${nftName}](https://hederasentient.com/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
     .setImage(nftImage)
     .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
     .setTimestamp(new Date())
@@ -580,11 +509,14 @@ for(var tx of transactions){
 
         });
     })
+    
+    timeStampSentient=txTimestamp
 
-     
 }
 
+
 }
+timeStampSentient++
 
 break
 
@@ -594,16 +526,6 @@ console.log(`Retrying API request (1)`)
 
 }
 
-
-if (transactions.length!=0){
-    timeStampSentient = parseInt(transactions[0]['consensus_timestamp'])+1
-    try{
-
-        var GUILD_ID = client.guilds.cache.map(guild => guild.id);
-        client.user.setActivity(`Sales On ${GUILD_ID.length} Servers`, { type: 'WATCHING' });
-            
-        }catch(e){console.log(`Error in updating status!`)}
-}
 
 // FOR HASHGUILD MARKETPLACE
 
@@ -762,7 +684,7 @@ while(true){
                     .setColor('#808080')
                     .setAuthor({ name: 'HashGuild Sales', iconURL: 'https://www.trst-nft.com/wp-content/uploads/2022/05/HG-sponsor-logo.png'})
                     .setTitle(`${nftName} ${nftSerial} SOLD!`)
-                    .setDescription(`\n**__Collection__**\n[${nftName}](https://hashguild.xyz/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/#/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/#/mainnet/account/${seller})\n`)
+                    .setDescription(`\n**__Collection__**\n[${nftName}](https://hashguild.xyz/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
                     .setImage(nftImage)
                     .setURL(`https://hashguild.xyz/assets/${nftTokenId}/${nftSerial}`)
                     .setTimestamp(new Date())
@@ -846,7 +768,6 @@ await sleep(1*1000)
 
 
 }
-
 
 
 })
