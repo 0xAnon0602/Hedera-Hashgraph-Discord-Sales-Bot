@@ -403,7 +403,7 @@ for(var tx of reversedTransactions){
         var buyer = tx['buyerAddress']
         var seller = tx['sellerAddress']
         var nftName = tx['name']
-        var nftImage=tx['imageCDN']
+        var nftImage=tx['imageParsed']
         var value = Math.abs(parseInt(tx['salePrice']))
         var txID = tx['saleTransactionId']
 
