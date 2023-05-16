@@ -14,7 +14,7 @@ const { Client, Intents,MessageEmbed } = require('discord.js');
 const discord_api=process.env.DISCORD_API
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
-var mainZuseAccount = `0.0.703235`
+var mainZuseAccount = `0.0.2254995`
 
 function toTimestamp(strDate){
     var datum = Date.parse(strDate);
