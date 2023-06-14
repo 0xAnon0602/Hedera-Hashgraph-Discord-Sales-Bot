@@ -361,10 +361,14 @@ for(var tx of reversedTransactions){
         var buyer = tx['buyerAddress']
         var seller = tx['sellerAddress']
         var nftName = tx['name']
-        var nftImage=tx['imageParsed']
+        var nftImage=tx['imageCDN']
         var value = Math.abs(parseInt(tx['salePrice']))
         var txID = tx['saleTransactionId']
 
+        const extension = nftImage.slice(-3)
+        if(extension=="jpg"){
+            nftImage = nftImage.replace("w32","w500")
+        }
 
     // TO GET HBAR PRICE
 
