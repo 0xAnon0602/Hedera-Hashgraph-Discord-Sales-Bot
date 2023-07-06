@@ -275,7 +275,7 @@ for(var tx of transactions){
     .setColor('#808080')
     .setAuthor({ name: 'Zuse Sales', iconURL: 'https://zuse.market/img/zuse_logo.2031c4b5.png'})
     .setTitle(`${nftName} ${nftSerial} SOLD!`)
-    .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://nftexplorer.pwoosam.com/account/${buyer})\n\n**__Seller__**\n[${seller}](https://nftexplorer.pwoosam.com/account/${seller})\n`)
+    .setDescription(`\n**__Collection__**\n[${nftName}](https://zuse.market/collection/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
     .setImage(nftImage)
     .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
     .setTimestamp(new Date())
@@ -360,7 +360,7 @@ for(var tx of reversedTransactions){
         var nftSerial = tx['serialId'] 
         var buyer = tx['buyerAddress']
         var seller = tx['sellerAddress']
-        var nftName = tx['name']
+        var nftName = tx['cname']
         var nftImage=tx['imageCDN']
         var value = Math.abs(parseInt(tx['salePrice']))
         var txID = tx['saleTransactionId']
@@ -405,9 +405,9 @@ for(var tx of reversedTransactions){
 
     const exampleEmbed = new MessageEmbed()
     .setColor('#808080')
-    .setAuthor({ name: 'Sentient Sales', iconURL: 'https://hederasentient.com/assets/images/logo-dark.png'})
+    .setAuthor({ name: 'SentX Sales', iconURL: 'https://sentx.io/cdn-cgi/image/width=40,quality=90/https://sentient-bherbhd8e3cyg4dn.z01.azurefd.net/media/web/logo-sm-notrans.png'})
     .setTitle(`${nftName} ${nftSerial} SOLD!`)
-    .setDescription(`\n**__Collection__**\n[${nftName}](https://hederasentient.com/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://nftexplorer.pwoosam.com/account/${buyer})\n\n**__Seller__**\n[${seller}](https://nftexplorer.pwoosam.com/account/${seller})\n`)
+    .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
     .setImage(nftImage)
     .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
     .setTimestamp(new Date())
