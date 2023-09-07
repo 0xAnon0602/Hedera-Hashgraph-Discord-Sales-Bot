@@ -128,7 +128,7 @@ client.api.applications(client.user.id).commands.post({data:
 })
 
 var timeStampZuse = Math.floor(Date.now() / 1000)
-var timeStampHashguild = Math.floor(Date.now() / 1000)
+// var timeStampHashguild = Math.floor(Date.now() / 1000)
 var timeStampSentient = Math.floor(Date.now() / 1000)
 
 
@@ -451,195 +451,195 @@ console.log(`Retrying API request (1)`)
 
 // FOR HASHGUILD MARKETPLACE
 
-while(true){
-    try{
+// while(true){
+//     try{
     
-    var query = `
-    query GetTransactionActivity($orderBy: [TransactionOrderByWithRelationInput!], $take: Int, $where: TransactionWhereInput) {
-      transactions(orderBy: $orderBy, take: $take, where: $where) {
-        buyer {
-          nickname
-          accountId
-          __typename
-        }
-        seller {
-          nickname
-          accountId
-          __typename
-        }
-        transactedNft {
-          token
-          serialNo
-          name
-          listingPrice
-          isVerified
-          imageUrl
-          id
-          creator
-          favoritedByIds
-          isForSale
-          isVideoNft
-          __typename
-        }
-        id
-        dateOfTransaction
-        transactionType
-        hbarTransacted {
-          price
-          __typename
-        }
-        __typename
-      }
-    }
-    `
+//     var query = `
+//     query GetTransactionActivity($orderBy: [TransactionOrderByWithRelationInput!], $take: Int, $where: TransactionWhereInput) {
+//       transactions(orderBy: $orderBy, take: $take, where: $where) {
+//         buyer {
+//           nickname
+//           accountId
+//           __typename
+//         }
+//         seller {
+//           nickname
+//           accountId
+//           __typename
+//         }
+//         transactedNft {
+//           token
+//           serialNo
+//           name
+//           listingPrice
+//           isVerified
+//           imageUrl
+//           id
+//           creator
+//           favoritedByIds
+//           isForSale
+//           isVideoNft
+//           __typename
+//         }
+//         id
+//         dateOfTransaction
+//         transactionType
+//         hbarTransacted {
+//           price
+//           __typename
+//         }
+//         __typename
+//       }
+//     }
+//     `
     
-    var url  = `https://hashguild.xyz/api/graphql`
-    var variables = {
-        "where": {
-            "transactionType": {
-                "equals": "SALE"
-            },
-            "successful": {
-                "equals": true
-            },
-            "transactedNft": {
-                "isNot": null
-            }
-        },
-        "orderBy": [
-            {
-                "dateOfTransaction": "desc"
-            }
-        ],
-        "take": 100
-    }
+//     var url  = `https://hashguild.xyz/api/graphql`
+//     var variables = {
+//         "where": {
+//             "transactionType": {
+//                 "equals": "SALE"
+//             },
+//             "successful": {
+//                 "equals": true
+//             },
+//             "transactedNft": {
+//                 "isNot": null
+//             }
+//         },
+//         "orderBy": [
+//             {
+//                 "dateOfTransaction": "desc"
+//             }
+//         ],
+//         "take": 100
+//     }
     
-    var opts = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query,      
-          variables
-        })
-      }
+//     var opts = {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           query,      
+//           variables
+//         })
+//       }
     
 
-    var response = await web_call(url,opts)
+//     var response = await web_call(url,opts)
     
-    var transactions = (response['data']['transactions'])
+//     var transactions = (response['data']['transactions'])
 
     
-    var tempTimestamp = timeStampHashguild
+//     var tempTimestamp = timeStampHashguild
     
-    for(var tx of transactions){
+//     for(var tx of transactions){
     
     
-        if(parseInt(toTimestamp(tx['dateOfTransaction'])) > timeStampHashguild){
+//         if(parseInt(toTimestamp(tx['dateOfTransaction'])) > timeStampHashguild){
             
     
-            if(parseInt(toTimestamp(tx['dateOfTransaction'])) > tempTimestamp){tempTimestamp = parseInt(toTimestamp(tx['dateOfTransaction']))}
+//             if(parseInt(toTimestamp(tx['dateOfTransaction'])) > tempTimestamp){tempTimestamp = parseInt(toTimestamp(tx['dateOfTransaction']))}
     
         
     
-                    var nftTokenId = tx['transactedNft']['token']
-                    var buyer = tx['buyer']['accountId']
-                    var seller = tx['seller']['accountId']
-                    var value = tx['hbarTransacted']['price']
-                    var nftImage = tx['transactedNft']['imageUrl']
-                    var nftSerial = tx['transactedNft']['serialNo']
+//                     var nftTokenId = tx['transactedNft']['token']
+//                     var buyer = tx['buyer']['accountId']
+//                     var seller = tx['seller']['accountId']
+//                     var value = tx['hbarTransacted']['price']
+//                     var nftImage = tx['transactedNft']['imageUrl']
+//                     var nftSerial = tx['transactedNft']['serialNo']
     
            
-                    while(true){
-                        try{
+//                     while(true){
+//                         try{
         
-                    var url=`https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${nftTokenId}`
+//                     var url=`https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${nftTokenId}`
         
-                    var opts = {
-                        headers:{
-                            'accept': 'application/json'
-                        }
-                    }
+//                     var opts = {
+//                         headers:{
+//                             'accept': 'application/json'
+//                         }
+//                     }
                     
-                    var response = await web_call(url,opts)
-                    break
+//                     var response = await web_call(url,opts)
+//                     break
         
-                        }catch(e){console.log(e)}
-                    }
+//                         }catch(e){console.log(e)}
+//                     }
     
-                    var nftName = response['name']
+//                     var nftName = response['name']
          
-                    // while(true){
-                    // try{
+//                     // while(true){
+//                     // try{
 
-                    // var priceData = await CoinGeckoClient.simple.price({
-                    //     ids: ['hedera-hashgraph'],
-                    //     vs_currencies: ['usd'],
-                    // }); 
+//                     // var priceData = await CoinGeckoClient.simple.price({
+//                     //     ids: ['hedera-hashgraph'],
+//                     //     vs_currencies: ['usd'],
+//                     // }); 
                     
-                    // var coinPrice = (priceData['data']['hedera-hashgraph']['usd']*value).toFixed(2)
-                    // break
+//                     // var coinPrice = (priceData['data']['hedera-hashgraph']['usd']*value).toFixed(2)
+//                     // break
 
-                    // }catch(e){
-                    //     console.log(e)
-                    //     console.log(`Retrying Coingecko API`)                        
-                    //     }
-                    // }   
+//                     // }catch(e){
+//                     //     console.log(e)
+//                     //     console.log(`Retrying Coingecko API`)                        
+//                     //     }
+//                     // }   
 
 
     
 
-                console.log(
-                    ` 
-                    Name -> ${nftName}
-                    Buyer -> ${buyer}
-                    Seller -> ${seller}
-                    Nft Contract ->  ${nftTokenId}
-                    Token ID ->  ${nftSerial}
-                    Value -> ${value}
-                    Image -> ${nftImage}
-                    `)
+//                 console.log(
+//                     ` 
+//                     Name -> ${nftName}
+//                     Buyer -> ${buyer}
+//                     Seller -> ${seller}
+//                     Nft Contract ->  ${nftTokenId}
+//                     Token ID ->  ${nftSerial}
+//                     Value -> ${value}
+//                     Image -> ${nftImage}
+//                     `)
 
 
-                    const exampleEmbed = new MessageEmbed()
-                    .setColor('#808080')
-                    .setAuthor({ name: 'HashGuild Sales', iconURL: 'https://www.trst-nft.com/wp-content/uploads/2022/05/HG-sponsor-logo.png'})
-                    .setTitle(`${nftName} ${nftSerial} SOLD!`)
-                    .setDescription(`\n**__Collection__**\n[${nftName}](https://hashguild.xyz/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR \n\n**__Buyer__**\n[${buyer}](https://nftexplorer.pwoosam.com/account/${buyer})\n\n**__Seller__**\n[${seller}](https://nftexplorer.pwoosam.com/account/${seller})\n`)
-                    .setImage(nftImage)
-                    .setURL(`https://hashguild.xyz/assets/${nftTokenId}/${nftSerial}`)
-                    .setTimestamp(new Date())
-                    .setFooter({ text: 'Made by 0xAnon#0602'});
+//                     const exampleEmbed = new MessageEmbed()
+//                     .setColor('#808080')
+//                     .setAuthor({ name: 'HashGuild Sales', iconURL: 'https://www.trst-nft.com/wp-content/uploads/2022/05/HG-sponsor-logo.png'})
+//                     .setTitle(`${nftName} ${nftSerial} SOLD!`)
+//                     .setDescription(`\n**__Collection__**\n[${nftName}](https://hashguild.xyz/collection/${nftTokenId})\n\n**__Price__**\n${value} HBAR \n\n**__Buyer__**\n[${buyer}](https://nftexplorer.pwoosam.com/account/${buyer})\n\n**__Seller__**\n[${seller}](https://nftexplorer.pwoosam.com/account/${seller})\n`)
+//                     .setImage(nftImage)
+//                     .setURL(`https://hashguild.xyz/assets/${nftTokenId}/${nftSerial}`)
+//                     .setTimestamp(new Date())
+//                     .setFooter({ text: 'Made by 0xAnon#0602'});
     
-                    var allMatching = await getContracts(nftTokenId)
+//                     var allMatching = await getContracts(nftTokenId)
 
-                    for(const row of allMatching){
-                        try{
-                            var channelInfo = client.channels.cache.get(row['channelID'])
-                            client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-                               console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
-                           })
-                        }catch(e){
-                            if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
-                            else{
-                            console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
-                            }
-                        }
+//                     for(const row of allMatching){
+//                         try{
+//                             var channelInfo = client.channels.cache.get(row['channelID'])
+//                             client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
+//                                console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+//                            })
+//                         }catch(e){
+//                             if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
+//                             else{
+//                             console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+//                             }
+//                         }
                 
-                    }                
+//                     }                
 
-        }
-    }
+//         }
+//     }
     
-    break
-    }catch(e){
-        console.log(`Retrying again GRAPHQL request`)
-        await sleep(1*1000)
-    }
-    }
+//     break
+//     }catch(e){
+//         console.log(`Retrying again GRAPHQL request`)
+//         await sleep(1*1000)
+//     }
+//     }
 
-timeStampHashguild = tempTimestamp
+// timeStampHashguild = tempTimestamp
     
 
 await sleep(1*1000)
