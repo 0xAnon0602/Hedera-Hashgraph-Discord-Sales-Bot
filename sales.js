@@ -325,7 +325,7 @@ while(true){
     try{
 
 // To get new transactions in interval of 1 second
-var url=`https://hederasentientbackend.azurewebsites.net/getactivityMarketplace`
+var url=`https://backend.sentx.io/getactivityMarketplace`
 
 
 var opts = {
