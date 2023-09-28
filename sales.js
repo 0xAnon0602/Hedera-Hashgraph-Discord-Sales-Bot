@@ -287,13 +287,10 @@ for(var tx of transactions){
         try{
             var channelInfo = client.channels.cache.get(row['channelID'])
             client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-               console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+               console.log(`Error in sending server`)
            })
         }catch(e){
             if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
-            else{
-            console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
-            }
         }
 
     }
@@ -420,13 +417,10 @@ for(var tx of reversedTransactions){
         try{
             var channelInfo = client.channels.cache.get(row['channelID'])
             client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-               console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
+               console.log(`Error in sending to server`)
            })
         }catch(e){
             if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
-            else{
-            console.log(`Error in sending to ${channelInfo.name} channel on ${channelInfo.guild.name} server`)
-            }
         }
 
     }
