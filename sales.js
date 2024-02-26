@@ -322,7 +322,7 @@ while(true){
     try{
 
 // To get new transactions in interval of 1 second
-var url=`https://backend.sentx.io/getactivityMarketplace`
+var url=`https://gbackend.sentx.io/getactivityMarketplace`
 
 
 var opts = {
@@ -331,8 +331,6 @@ var opts = {
         'accept': 'application/json'
     },       
     body: JSON.stringify({
-        "f": null,
-        "a": null,
         "page": 1,
         "amount": 25,
         "activityFilter": "Sales"
@@ -347,7 +345,7 @@ let reversedTransactions = transactions.map((e, i, a)=> a[(a.length -1) -i])
 
 for(var tx of reversedTransactions){
 
-        var saleTypeId = tx['saleTypeId']
+        var saleTypeId = tx['nftSaleTypeId']
         var txTimestampTemp = new Date(tx['saleDate'])
         var txTimestamp = parseInt(txTimestampTemp.getTime()/1000);
 
