@@ -216,7 +216,7 @@ while(true){
 
         const exampleEmbed = new MessageEmbed()
         .setColor('#808080')
-        .setAuthor({ name: 'SentX Sales', iconURL: 'https://sentx.io/cdn-cgi/image/width=40,quality=90/https://sentient-bherbhd8e3cyg4dn.z01.azurefd.net/media/web/logo-sm-notrans.png'})
+        .setAuthor({ name: 'SentX Sales', iconURL: 'https://blob.sentx.io/media/web/logo-sm-notrans.png?width=128'})
         .setTitle(`${nftName} ${nftSerial} SOLD!`)
         .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
         .setImage(nftImage)
