@@ -155,14 +155,15 @@ while(true){
         var response = await web_call(url,opts)
         var transactions = (response['response'])
         let reversedTransactions = transactions.map((e, i, a)=> a[(a.length -1) -i])
+        let tempSentientTimestamp = 0;
 
         for(var tx of reversedTransactions){
 
-                var saleTypeId = tx['nftSaleTypeId']
-                var txTimestampTemp = new Date(tx['saleDate'])
-                var txTimestamp = parseInt(txTimestampTemp.getTime()/1000);
+            var saleTypeId = tx['nftSaleTypeId']
+            var txTimestampTemp = new Date(tx['saleDate'])
+            var txTimestamp = parseInt(txTimestampTemp.getTime()/1000);
 
-                if(txTimestamp>=timeStampSentient && saleTypeId==1){
+            if(txTimestamp>=timeStampSentient && saleTypeId==1){
 
                 var nftTokenId = tx['tokenAddress']
                 var nftSerial = tx['serialId'] 
@@ -179,50 +180,56 @@ while(true){
                 }
 
 
-            console.log(
-            ` 
-            Name -> ${nftName}
-            Buyer -> ${buyer}
-            Seller -> ${seller}
-            Nft Contract ->  ${nftTokenId}
-            Token ID ->  ${nftSerial}
-            Value -> ${value}
-            Image -> ${nftImage}
-            Tx ID -> ${txID}
-            `)
-            
+                console.log(
+                ` 
+                Name -> ${nftName}
+                Buyer -> ${buyer}
+                Seller -> ${seller}
+                Nft Contract ->  ${nftTokenId}
+                Token ID ->  ${nftSerial}
+                Value -> ${value}
+                Image -> ${nftImage}
+                Tx ID -> ${txID}
+                `)
+                
 
-            const exampleEmbed = new MessageEmbed()
-            .setColor('#808080')
-            .setAuthor({ name: 'SentX Sales', iconURL: 'https://blob.sentx.io/media/web/logo-sm-notrans.png?width=128'})
-            .setTitle(`${nftName} ${nftSerial} SOLD!`)
-            .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
-            .setImage(nftImage)
-            .setURL(`https://hederaexplorer.io/search-details/tran7576saction/${txID}`)
-            .setTimestamp(new Date())
-            .setFooter({ text: 'Made by 0xAnon'});
+                const exampleEmbed = new MessageEmbed()
+                .setColor('#808080')
+                .setAuthor({ name: 'SentX Sales', iconURL: 'https://blob.sentx.io/media/web/logo-sm-notrans.png?width=128'})
+                .setTitle(`${nftName} ${nftSerial} SOLD!`)
+                .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
+                .setImage(nftImage)
+                .setURL(`https://hederaexplorer.io/search-details/tran7576saction/${txID}`)
+                .setTimestamp(new Date())
+                .setFooter({ text: 'Made by 0xAnon'});
 
 
-            var allMatching = await getContracts(nftTokenId)
+                var allMatching = await getContracts(nftTokenId)
 
-            for(const row of allMatching){
-                try{
-                    var channelInfo = client.channels.cache.get(row['channelID'])
-                    client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
-                    console.log(`Error in sending to server`)
-                })
-                }catch(e){
-                    if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
+                for(const row of allMatching){
+                    try{
+                        var channelInfo = client.channels.cache.get(row['channelID'])
+                        client.channels.cache.get(row['channelID']).send({ embeds: [exampleEmbed] }).catch(e =>{
+                        console.log(`Error in sending to server`)
+                    })
+                    }catch(e){
+                        if(channelInfo==undefined){console.log(`Error in sending to unknown Channel`)}
+                    }
+
                 }
 
+                if(value>=150){
+                    client.channels.cache.get(`1125884996624855110`).send({ embeds: [exampleEmbed] }).catch(e =>{
+                    console.log(`Error in sending to server`)
+                    })
+                }
+                
+                tempSentientTimestamp=txTimestamp
+
             }
-
-            timeStampSentient=txTimestamp
-
         }
 
-
-        }
+        if(tempSentientTimestamp > timeStampSentient) timeStampSentient = tempSentientTimestamp
         timeStampSentient++
 
     }catch(e){
@@ -246,6 +253,7 @@ while(true){
 
         let response = await web_call(url,opts)
         let reversedTransactions = response.map((e, i, a)=> a[(a.length -1) -i])
+        let tempKabilaTimestamp = 0;
         
         for(const nftSale of reversedTransactions){
 
@@ -302,11 +310,17 @@ while(true){
     
                 }
 
-                timestampKabila = nftSaleTimestamp
+                client.channels.cache.get(`1226909437491544139`).send({ embeds: [exampleEmbed] }).catch(e =>{
+                    console.log(`Error in sending to server`)
+                })
+
+                tempKabilaTimestamp = nftSaleTimestamp
 
             }
 
         }
+
+        if(tempKabilaTimestamp > timestampKabila) timestampKabila = tempKabilaTimestamp
 
     }catch(e){
         console.log(e)
