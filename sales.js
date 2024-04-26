@@ -242,7 +242,7 @@ while(true){
 
     try{
 
-        let url=`https://labs.kabila.app/api/marketplace/analytics/activity?skip=0&limit=25&timeRange=30d&format=JSONEachRow&fields=tokenId%2CcollectionName%2CserialNumber%2Cname%2CimageCid%2CactivityType%2CsubactivityType%2CverificationType%2Cprice%2Ccurrency%2CbuyerId%2CsellerId%2CcreatedAt&activityType=SALE`
+        let url=`https://labs.kabila.app/api/marketplace/analytics/activity?skip=0&limit=25&timeRange=2m&format=JSONEachRow&fields=tokenId%2CcollectionName%2CserialNumber%2Cname%2CimageCid%2CactivityType%2CsubactivityType%2CverificationType%2Cprice%2Ccurrency%2CbuyerId%2CsellerId%2CcreatedAt&activityType=SALE`
 
         let opts = {
             method: "GET",
