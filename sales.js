@@ -174,11 +174,16 @@ while(true){
                 var value = Math.abs(parseInt(tx['salePrice']))
                 var txID = tx['saleTransactionId']
 
-                const extension = nftImage.slice(-3)
-                if(extension=="jpg"){
-                    nftImage = nftImage.replace("w32","w500")
+                try{
+                    const extension = nftImage.slice(-3)
+                    if(extension=="jpg"){
+                        nftImage = nftImage.replace("w32","w500")
+                    }
+                }catch(e){
+                    console.log(e)
+                    console.log('Something Went Wrong in SENTX Image')
+                    nftImage = `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvUio5S_e5H0Yo2B0dBsEC09oLUDIOORQM4w&usqp=CAU`
                 }
-
 
                 console.log(
                 ` 
