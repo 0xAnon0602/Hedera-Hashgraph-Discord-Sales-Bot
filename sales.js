@@ -223,12 +223,6 @@ while(true){
 
                 }
 
-                if(value>=150){
-                    client.channels.cache.get(`1125884996624855110`).send({ embeds: [exampleEmbed] }).catch(e =>{
-                    console.log(`Error in sending to server`)
-                    })
-                }
-                
                 tempSentientTimestamp=txTimestamp
 
             }
@@ -314,10 +308,6 @@ while(true){
                     }
     
                 }
-
-                client.channels.cache.get(`1226909437491544139`).send({ embeds: [exampleEmbed] }).catch(e =>{
-                    console.log(`Error in sending to server`)
-                })
 
                 tempKabilaTimestamp = nftSaleTimestamp
 
