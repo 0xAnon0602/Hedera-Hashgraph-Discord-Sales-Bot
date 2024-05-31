@@ -21,6 +21,14 @@ function getKabilaContract(str) {
     return match ? match[1] : null;
 }
 
+function getSentxToken(_paymentTokenType){
+
+    if(_paymentTokenType == 1) return `ℏ`
+    else if(_paymentTokenType == 24) return ` $STEAM`
+    else return ` N/A`
+
+}
+
 web_call = async (url,opts) => {
   
     let response_daily = await fetch(url,opts,{ mode: 'no-cors'});
@@ -144,11 +152,9 @@ while(true){
                 'accept': 'application/json'
             },       
             body: JSON.stringify({
-                "f": null,
-                "a": null,
                 "page": 1,
-                "amount": 25,
-                "activityFilter": "Sales"
+                "activityFilterArray": [1],
+                "allHTSTokens": true,
             })
         }
 
@@ -173,6 +179,7 @@ while(true){
                 var nftImage=tx['imageCDN']
                 var value = Math.abs(parseInt(tx['salePrice']))
                 var txID = tx['saleTransactionId']
+                var tokenName = getSentxToken(tx['paymentTokenId'])
 
                 try{
                     const extension = nftImage.slice(-3)
@@ -202,7 +209,7 @@ while(true){
                 .setColor('#808080')
                 .setAuthor({ name: 'SentX Sales', iconURL: 'https://blob.sentx.io/media/web/logo-sm-notrans.png?width=128'})
                 .setTitle(`${nftName} ${nftSerial} SOLD!`)
-                .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
+                .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}${tokenName} \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
                 .setImage(nftImage)
                 .setURL(`https://hederaexplorer.io/search-details/tran7576saction/${txID}`)
                 .setTimestamp(new Date())
@@ -270,10 +277,12 @@ while(true){
                 let nftImage
 
                 if(nftImageTemp.includes("ipfs.io")){
-                    nftImage = `https://ipfs-cdn.sentx.io/${nftImageTemp.substring(21)}?optimizer=image&width=250`
+                    nftImage = `https://cdn.kabila.app/ipfs/${nftImageTemp.substring(21)}?class=medium&optimizer=image`
                 }else{
-                    nftImage = `https://ipfs-cdn.sentx.io/${nftImageTemp.substring(7)}?optimizer=image&width=250`
+                    nftImage = `https://cdn.kabila.app/ipfs/${nftImageTemp.substring(7)}?class=medium&optimizer=image`
                 }
+
+                nftImage = nftImage.replace(/\s/g, '%20')
 
                 console.log(
                     ` 
