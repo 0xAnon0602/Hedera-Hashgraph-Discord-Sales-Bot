@@ -274,6 +274,7 @@ while(true){
                 var nftName = nftSale.collectionName
                 var nftImageTemp= nftSale.imageCid
                 var value = nftSale.price
+                var rank = nftSale.rank
                 let nftImage
 
                 if(nftImageTemp.includes("ipfs.io")){
@@ -299,7 +300,7 @@ while(true){
                 .setColor('#808080')
                 .setAuthor({ name: 'Kabila Market Sales', iconURL: 'https://pbs.twimg.com/profile_images/1719698453721137152/yF_-T1X9_400x400.jpg'})
                 .setTitle(`${nftName} ${nftSerial} SOLD!`)
-                .setDescription(`\n**__Collection__**\n[${nftName}](https://market.kabila.app/en/collections/${getKabilaContract(nftTokenId)})\n\n**__Price__**\n${value}ℏ \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
+                .setDescription(`\n**__Collection__**\n[${nftName}](https://market.kabila.app/en/collections/${getKabilaContract(nftTokenId)})\n\n**__Price__**\n${value}ℏ ${ rank!=0 ? `\n\n**__Rank__**\n${rank}`: ''} \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
                 .setImage(nftImage)
                 .setTimestamp(new Date())
                 .setFooter({ text: 'Made by 0xAnon'});
