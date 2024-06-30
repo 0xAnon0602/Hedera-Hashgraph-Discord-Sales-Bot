@@ -236,6 +236,12 @@ while(true){
                         }
 
                     }
+
+                    if(value>=150){
+                        client.channels.cache.get(`1125884996624855110`).send({ embeds: [exampleEmbed] }).catch(e =>{
+                        console.log(`Error in sending to server`)
+                        })
+                    }
                 
                 }
 
@@ -288,6 +294,8 @@ while(true){
 
                 if(nftImageTemp.includes("ipfs.io")){
                     nftImage = `https://cdn.kabila.app/ipfs/${nftImageTemp.substring(21)}?class=medium&optimizer=image`
+                }else if(nftImageTemp.includes("ar://")){
+                    nftImage = `https://akrd.net/${nftImageTemp.substring(5)}`
                 }else{
                     nftImage = `https://cdn.kabila.app/ipfs/${nftImageTemp.substring(7)}?class=medium&optimizer=image`
                 }
@@ -327,6 +335,10 @@ while(true){
                     }
     
                 }
+
+                client.channels.cache.get(`1226909437491544139`).send({ embeds: [exampleEmbed] }).catch(e =>{
+                    console.log(`Error in sending to server`)
+                })
 
                 tempKabilaTimestamp = nftSaleTimestamp
 
