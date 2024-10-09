@@ -21,11 +21,45 @@ function getKabilaContract(str) {
     return match ? match[1] : null;
 }
 
-function getSentxToken(_paymentTokenType){
+async function getSentxToken(_paymentTokenType){
 
-    if(_paymentTokenType == 1) return `ℏ`
-    else if(_paymentTokenType == 24) return ` $STEAM`
-    else return null
+    try {
+        
+        if(_paymentTokenType == 1) return `ℏ`
+
+        else{
+
+            var url=`https://gbackend.sentx.io/fungibleTokens/getFungibleTokenSettings`
+
+            var opts = {
+                method: "GET",
+                headers: {
+                    'accept': 'application/json, text/plain, */*',
+                    'accept-language': 'en-GB,en;q=0.5',
+                    'content-type': 'application/json',
+                },
+                referrer: 'https://sentx.io/',
+            };
+
+            var response = await web_call(url,opts)
+
+            for(const tokenInfo of response.fungibleTokens){
+                if(tokenInfo.tokenId == _paymentTokenType){
+                    const paymentTokenName = tokenInfo.symbol
+                    if(paymentTokenName.includes("$")) return paymentTokenName
+                    else return `$${paymentTokenName}`
+                }
+            }
+
+            return null
+
+        }
+
+    }catch(e){
+        console.log(e)
+        console.log(`Error finding token name - ${_paymentTokenType}`)
+        return null
+    }
 
 }
 
@@ -184,7 +218,7 @@ while(true){
                 var nftImage=tx['imageCDN']
                 var value = Math.abs(parseInt(tx['salePrice']))
                 var txID = tx['saleTransactionId']
-                var tokenName = getSentxToken(tx['paymentTokenId'])
+                var tokenName = await getSentxToken(tx['paymentTokenId'])
 
                 if(tokenName!=null){
 
