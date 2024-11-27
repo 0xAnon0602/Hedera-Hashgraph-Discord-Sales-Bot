@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+const axios = require('axios')
 const getContracts = require('./Database_Functions/getContracts.js')
 const addCollection = require('./Functions/addCollection.js')
 const addAllCollection = require('./Functions/addAllCollection.js')
@@ -20,56 +20,6 @@ function getKabilaContract(str) {
     const match = str.match(regex);
     return match ? match[1] : null;
 }
-
-async function getSentxToken(_paymentTokenType){
-
-    try {
-        
-        if(_paymentTokenType == 1) return `ℏ`
-
-        else{
-
-            var url=`https://gbackend.sentx.io/fungibleTokens/getFungibleTokenSettings`
-
-            var opts = {
-                method: "GET",
-                headers: {
-                    'accept': 'application/json, text/plain, */*',
-                    'accept-language': 'en-GB,en;q=0.5',
-                    'content-type': 'application/json',
-                },
-                referrer: 'https://sentx.io/',
-            };
-
-            var response = await web_call(url,opts)
-
-            for(const tokenInfo of response.fungibleTokens){
-                if(tokenInfo.tokenId == _paymentTokenType){
-                    const paymentTokenName = tokenInfo.symbol
-                    if(paymentTokenName.includes("$")) return paymentTokenName
-                    else return `$${paymentTokenName}`
-                }
-            }
-
-            return null
-
-        }
-
-    }catch(e){
-        console.log(e)
-        console.log(`Error finding token name - ${_paymentTokenType}`)
-        return null
-    }
-
-}
-
-web_call = async (url,opts) => {
-  
-    let response_daily = await fetch(url,opts,{ mode: 'no-cors'});
-    const result_daily = await response_daily.json();
-    return result_daily
-
-}    
 
 client.on('ready',  async () => {
 
@@ -178,47 +128,29 @@ while(true){
 
     try{    
 
-        var url=`https://gbackend.sentx.io/getactivityMarketplace`
+        var url=`https://api.sentx.io/v1/public/market/activity?apikey=${process.env.SENTX_API}&activityFilter=Sales&amount=50&page=1`
 
-        var opts = {
-            method: "POST",
-            headers: {
-                'accept': 'application/json, text/plain, */*',
-                'accept-language': 'en-GB,en;q=0.5',
-                'content-type': 'application/json',
-            },
-            referrer: 'https://sentx.io/',
-            body: JSON.stringify({
-                "page": 1,
-                "amount": 50,
-                "activityFilterArray": [1],
-                "allHTSTokens": true,
-                "minPrice": 0
-            }),
-        };
-
-        var response = await web_call(url,opts)
-        var transactions = (response['response'])
+        var response = await axios.get(url) 
+        var transactions = (response.data['marketActivity'])
         let reversedTransactions = transactions.map((e, i, a)=> a[(a.length -1) -i])
         let tempSentientTimestamp = 0;
 
         for(var tx of reversedTransactions){
 
-            var saleTypeId = tx['nftSaleTypeId']
             var txTimestampTemp = new Date(tx['saleDate'])
             var txTimestamp = parseInt(txTimestampTemp.getTime()/1000);
 
-            if(txTimestamp>=timeStampSentient && saleTypeId==1){
+            if(txTimestamp>=timeStampSentient){
 
-                var nftTokenId = tx['tokenAddress']
-                var nftSerial = tx['serialId'] 
+                var nftTokenId = tx['nftTokenAddress']
+                var nftSerial = tx['nftSerialId'] 
                 var buyer = tx['buyerAddress']
                 var seller = tx['sellerAddress']
-                var nftName = tx['cname']
+                var nftName = tx['collectionName']
                 var nftImage=tx['imageCDN']
                 var value = Math.abs(parseInt(tx['salePrice']))
                 var txID = tx['saleTransactionId']
-                var tokenName = await getSentxToken(tx['paymentTokenId'])
+                var tokenName = tx['paymentToken']['symbol']
 
                 if(tokenName!=null){
 
@@ -252,7 +184,7 @@ while(true){
                     .setTitle(`${nftName} ${nftSerial} SOLD!`)
                     .setDescription(`\n**__Collection__**\n[${nftName}](https://sentx.io/nft-marketplace/${nftTokenId})\n\n**__Price__**\n${value}${tokenName} \n\n**__Buyer__**\n[${buyer}](https://hashscan.io/mainnet/account/${buyer})\n\n**__Seller__**\n[${seller}](https://hashscan.io/mainnet/account/${seller})\n`)
                     .setImage(nftImage)
-                    .setURL(`https://hederaexplorer.io/search-details/tran7576saction/${txID}`)
+                    .setURL(`https://hederaexplorer.io/search-details/transaction/${txID}`)
                     .setTimestamp(new Date())
                     .setFooter({ text: 'Made by 0xAnon'});
 
@@ -299,14 +231,8 @@ while(true){
 
         let url=`https://labs.kabila.app/api/marketplace/analytics/activity?skip=0&limit=25&timeRange=2m&format=JSONEachRow&fields=tokenId%2CcollectionName%2CserialNumber%2Cname%2CimageCid%2CactivityType%2CsubactivityType%2CverificationType%2Cprice%2Ccurrency%2CbuyerId%2CsellerId%2Crank%2CcreatedAt&activityType=SALE`
 
-        let opts = {
-            method: "GET",
-            headers:{
-                'accept': 'application/json'
-            }
-        }
-
-        let response = await web_call(url,opts)
+        let response = await axios.get(url)
+        response =response.data
         let reversedTransactions = response.map((e, i, a)=> a[(a.length -1) -i])
         let tempKabilaTimestamp = 0;
         
