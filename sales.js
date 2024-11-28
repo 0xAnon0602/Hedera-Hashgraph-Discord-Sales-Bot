@@ -151,6 +151,8 @@ while(true){
                 var value = Math.abs(parseInt(tx['salePrice']))
                 var txID = tx['saleTransactionId']
                 var tokenName = tx['paymentToken']['symbol']
+                if(tokenName == 'HBAR') tokenName = 'ℏ'
+                else tokenName = ` ${tokenName}`
 
                 if(tokenName!=null){
 
